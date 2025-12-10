@@ -1,6 +1,5 @@
 import React from 'react'
 import { HistoryItem } from '../types';
-
 interface HistoryItemProps {
   history: HistoryItem[];
 }

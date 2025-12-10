@@ -1,17 +1,17 @@
-"use client"
+"use client";
 import Image from "next/image";
 import styles from "./page.module.css";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
-import FeatureGrid from "@/components/FeatureGrid";
-import HistoryPanel from "@/components/HistoryPanel";
-import tabs from "@/data/tabs";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
+import FeatureGrid from "./components/FeatureGrid";
+import HistoryPanel from "./components/HistoryPanel";
+import tabs from "./data/tabs";
 import { useState } from "react";
-import { Tab } from "@/types";
-import CodeExplainer from "@/components/CodeExplainer";
-import CodeDebugging from "@/components/CodeDebugging";
-import CodeGeneration from "@/components/CodeGeneration";
-
+import { HistoryItem } from "./types";
+import { Tab } from "./types";
+import CodeExplainer from "./components/CodeExplainer";
+import CodeDebugging from "./components/CodeDebugging";
+import CodeGeneration from "./components/CodeGeneration";
 
 export default function Home() {
   const [activeTab, setActiveTab] =useState<Tab["id"]>("explain");
@@ -25,7 +25,7 @@ export default function Home() {
     const newItem:HistoryItem={
       id:Date.now(),
       type,
-      timeStamp:new Date().toLocaleDateString(),
+      timestamp: new Date().toLocaleDateString(),
       input,
       output,
     };
@@ -42,9 +42,7 @@ export default function Home() {
         </div>
       </div>
       <main className="relative z-10 container mx-auto px-4 py-8 ">
-        <div className="flex flex-col lg:flex-row gap-8 max-w-7xl mx-auto">
-            <div></div>
-        </div>
+    
     <Header />
      <div className="flex flex-col lg:flex-row gap-8 max-w-7xl mx-auto">
           <div className="w-full lg:w-2/3">
@@ -52,7 +50,7 @@ export default function Home() {
               <div className="flex border-b border-gray-700/50 bg-gray-900/50 p-2">
               {tabs.map((tab)=>(
                 <button key={tab.id}
-                className={`flex ietms-center px-6 py-3 rounded-lg font-semibld transition-all cursor-pointer ${
+                className={`flex items-center px-6 py-3 rounded-lg font-semibld transition-all cursor-pointer ${
                       activeTab === tab.id
                       ? `bg-gradient-to-r ${tab.gradient} text-white shadow-lg`
                       : "text-gray-400 hover:text-white hover:bg-gray-700/50"
@@ -63,8 +61,8 @@ export default function Home() {
               </div>
               <div className="p-6">
                 {activeTab === "explain" && <CodeExplainer addToHistory={addToHistory} />}
-                {activeTab === "explain" && <CodeDebugging addToHistory={addToHistory}/>}
-                {activeTab === "explain" && <CodeGeneration addToHistory={addToHistory}/>}
+                {activeTab === "debug" && <CodeDebugging addToHistory={addToHistory}/>}
+                {activeTab === "generate" && <CodeGeneration addToHistory={addToHistory}/>}
 
 
               </div>

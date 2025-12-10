@@ -1,4 +1,4 @@
-import { ExplainRequest } from "@/types";
+import { ExplainRequest } from "@/app/types";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -15,11 +15,21 @@ export const POST = async (req: NextRequest) => {
         if(!code){
             return NextResponse.json({error:"Code is required"},{status: 400});
         }
-        const model= genAI.getGenerativeModel({model:"gemini-2.5-flash"});
+        const model= genAI.getGenerativeModel({model:"gemini-2.0-flash"});
         const prompt=`Please explain the following code in detail : \n\n${code}\n\n Explanation: `;
-        const result=await model.generateContent(prompt);
-        const response=await result.response;
-        const explanation = response.text();
+        const result = await model.generateContent({
+        contents: [
+            {
+            role: "user",
+            parts: [{ text: prompt }],
+            },
+        ],
+        });
+        
+        const explanation = result.response.text();
+
+        // const response=await result.response;
+        // const explanation = response.text();
 
         return NextResponse.json({data: {explanation} },{status:200});
 
