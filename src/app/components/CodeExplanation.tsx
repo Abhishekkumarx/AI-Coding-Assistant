@@ -77,10 +77,12 @@ const CodeExplanation = ({addToHistory} : CodeExplanationProps) => {
             <div className='absolute top-3 right-3 text-xs text-gray-500'>{code.length} chars</div>
           </div>
         </div>
+
+        <div className="mb-24">
         <button 
           onClick={handleExplain} 
           disabled={loading || !code.trim()}
-          className='w-full cursor-pointer px-6 py-4 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 to-pink-700 text-white font-semibold rounded-lg shadow-lg disabled:cursor-not-allowed flex items-center justify-center space-x-2'
+          className='mb-24 w-full cursor-pointer px-6 py-4 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 to-pink-700 text-white font-semibold rounded-lg shadow-lg disabled:cursor-not-allowed flex items-center justify-center space-x-2'
           >{loading ? (
             <><div className='w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin'></div>
             <span>Analyzing Code...</span>
@@ -91,6 +93,7 @@ const CodeExplanation = ({addToHistory} : CodeExplanationProps) => {
               <span>Explain Code</span>
             </>
           )}</button>
+        </div>
       </div>
       {explanation && (
         <div className='mt-6 animate-fade-in'>

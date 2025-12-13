@@ -1,79 +1,102 @@
 "use client";
-import Image from "next/image";
-import styles from "./page.module.css";
+
 import Header from "./components/Header";
-import Footer from "./components/Footer";
 import FeatureGrid from "./components/FeatureGrid";
 import HistoryPanel from "./components/HistoryPanel";
 import tabs from "./data/tabs";
 import { useState } from "react";
-import { HistoryItem } from "./types";
-import { Tab } from "./types";
-import CodeExplainer from "./components/CodeExplainer";
+import { HistoryItem, Tab } from "./types";
+import CodeExplanation from "./components/CodeExplanation";
 import CodeDebugging from "./components/CodeDebugging";
 import CodeGeneration from "./components/CodeGeneration";
 
 export default function Home() {
-  const [activeTab, setActiveTab] =useState<Tab["id"]>("explain");
+  const [activeTab, setActiveTab] = useState<Tab["id"]>("explain");
   const [history, setHistory] = useState<HistoryItem[]>([]);
 
   const addToHistory = (
-    type:HistoryItem["type"],
-    input:string,
-    output:string
-  )=>{
-    const newItem:HistoryItem={
-      id:Date.now(),
+    type: HistoryItem["type"],
+    input: string,
+    output: string
+  ) => {
+    const newItem: HistoryItem = {
+      id: Date.now(),
       type,
       timestamp: new Date().toLocaleDateString(),
       input,
       output,
     };
-    setHistory((prev)=>[newItem, ...prev.slice(0,9)]);
-
+    setHistory((prev) => [newItem, ...prev.slice(0, 9)]);
   };
+
   return (
-    <>
-     <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -inset-10 opacity-20">
-          <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-purple-500 rounded-lg"/>
-            <div className="absolute top-1/3 right-1/4 w-72 h-72 bg-yellow-500 rounded-lg"/>
-            <div className="absolute bottom-1/4 left-1/3 w-72 h-72 bg-pin-500 rounded-lg"/>
-        </div>
-      </div>
-      <main className="relative z-10 container mx-auto px-4 py-8 ">
-    
-    <Header />
-     <div className="flex flex-col lg:flex-row gap-8 max-w-7xl mx-auto">
-          <div className="w-full lg:w-2/3">
-            <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl shadow-2xl">
-              <div className="flex border-b border-gray-700/50 bg-gray-900/50 p-2">
-              {tabs.map((tab)=>(
-                <button key={tab.id}
-                className={`flex items-center px-6 py-3 rounded-lg font-semibld transition-all cursor-pointer ${
-                      activeTab === tab.id
-                      ? `bg-gradient-to-r ${tab.gradient} text-white shadow-lg`
-                      : "text-gray-400 hover:text-white hover:bg-gray-700/50"
+ <div className="min-h-screen bg-gradient-to-r from-gray-950 via-gray-900 to-gray-700 text-white">
+      {/* HEADER */}
+      <Header />
+
+      {/* MAIN CONTENT */}
+      <main className="max-w-7xl mx-auto px-4 py-10">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          
+          {/* LEFT PANEL */}
+          <div className="lg:col-span-2">
+            <div className="bg-gray-900/70 border border-gray-800 rounded-2xl shadow-xl overflow-hidden">
+              
+              {/* TABS */}
+              <div className="flex gap-2 p-3 border-b border-gray-800 bg-gray-900">
+                {tabs.map((tab) => (
+                  <button
+                    key={tab.id}
+                    onClick={() => setActiveTab(tab.id)}
+                    className={`flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold transition-all
+                      ${
+                        activeTab === tab.id
+                          ? `bg-gradient-to-r ${tab.gradient} text-white shadow-md`
+                          : "text-gray-400 hover:text-white hover:bg-gray-800"
                       }`}
-                 onClick={()=> setActiveTab(tab.id)}>
-                  <span className="text-xl mr-2"> {tab.icon}</span>{tab.label}</button>
-              ))}
+                  >
+                    <span className="text-lg">{tab.icon}</span>
+                    {tab.label}
+                  </button>
+                ))}
               </div>
+
+              {/* TAB CONTENT */}
               <div className="p-6">
-                {activeTab === "explain" && <CodeExplainer addToHistory={addToHistory} />}
-                {activeTab === "debug" && <CodeDebugging addToHistory={addToHistory}/>}
-                {activeTab === "generate" && <CodeGeneration addToHistory={addToHistory}/>}
-
-
+                {activeTab === "explain" && (
+                  <CodeExplanation addToHistory={addToHistory} />
+                )}
+                {activeTab === "debug" && (
+                  <CodeDebugging addToHistory={addToHistory} />
+                )}
+                {activeTab === "generate" && (
+                  <CodeGeneration addToHistory={addToHistory} />
+                )}
               </div>
             </div>
           </div>
-          <div className="w-full lg:w-1/3"></div>
-          <HistoryPanel  history={history}/>
-      </div>    
-    <FeatureGrid/>
+
+          {/* RIGHT PANEL (HISTORY) */}
+          <div className="lg:col-span-1">
+            <div className="sticky top-24">
+              <HistoryPanel history={history} />
+            </div>
+          </div>
+        </div>
+
+        {/* FEATURES */}
       </main>
-    <Footer/>
-</>
+
+      {/* FOOTER */}
+        <div>
+          <br />
+        </div>
+        <div className="">
+          <FeatureGrid />
+        </div>
+      <footer className="text-center py-8 text-gray-400 ">
+        Powered by Google Gemini AI
+      </footer>
+    </div>
   );
 }
